@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tuckbox.ui.theme.Cabin
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -62,7 +63,7 @@ fun LoginScreen(navController: NavController) {
                 Spacer(Modifier.padding(top = 50.dp))
                 TextField(value = password, placeholder = {Text(text = "Password", style = TextStyle(Color.Gray, fontSize = 20.sp))},onValueChange = {newText -> password = newText}, colors = TextFieldDefaults.colors(focusedContainerColor = Color.Transparent, unfocusedContainerColor = Color.Transparent))
                 Spacer(Modifier.padding(top = 90.dp))
-                Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color(35,35,35)), modifier = Modifier.width(300.dp)) {
+                Button(onClick = { loginUser(eMail, password, navController) }, colors = ButtonDefaults.buttonColors(containerColor = Color(35,35,35)), modifier = Modifier.width(300.dp)) {
                     Text(text = "Login", style = TextStyle(fontFamily = Cabin, fontWeight = FontWeight.Bold, fontSize = 18.sp))
                 }
                 Spacer(modifier = Modifier.padding(top = 20.dp))
@@ -74,4 +75,11 @@ fun LoginScreen(navController: NavController) {
 
     }
 
+}
+
+fun loginUser(eMail:String, password: String, navController: NavController){
+    val auth = FirebaseAuth.getInstance()
+    auth.signInWithEmailAndPassword(eMail, password).addOnSuccessListener {
+        navController.navigate("home_screen")
+    }
 }

@@ -1,7 +1,8 @@
 package com.example.tuckbox
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,15 +27,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.util.Locale
+
+//private lateinit var auth: FirebaseAuth
+//private lateinit var fireStore: Firebase
+
 
 @Composable
 fun RegisterScreen(navController: NavController) {
@@ -44,7 +53,16 @@ fun RegisterScreen(navController: NavController) {
     var phone by remember {mutableStateOf("")}
     var password by remember {mutableStateOf("")}
 
-    Box(modifier = Modifier.fillMaxSize()){
+    val context = LocalContext.current
+
+    val firstNameError by remember{ mutableStateOf(false) }
+    val lastNameError by remember{ mutableStateOf(false)}
+    val eMailError by remember{ mutableStateOf(false)}
+    val phoneError by remember{ mutableStateOf(false)}
+    val passwordError by remember{ mutableStateOf(false)}
+
+
+        Box(modifier = Modifier.fillMaxSize()){
         Image(painter = painterResource(R.drawable.sandwith), contentDescription = null,
             Modifier
                 .size(250.dp)
@@ -63,10 +81,11 @@ fun RegisterScreen(navController: NavController) {
                         .padding(top = 10.dp))
             }
 
-            Text(modifier = Modifier.padding(start = 20.dp, top = 80.dp),text = "Create\nAccount", style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color(54,54,54)))
+            Text(modifier = Modifier.padding(start = 20.dp, top = 50.dp),text = "Create\nAccount", style = TextStyle(fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color(54,54,54)))
             Box(modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 90.dp), contentAlignment = Alignment.TopCenter) {
+                .padding(top = 30.dp)
+                , contentAlignment = Alignment.TopCenter) {
                 Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
                     TextField(
                         value = firstName,
@@ -75,6 +94,7 @@ fun RegisterScreen(navController: NavController) {
                                 text = "First Name",
                                 style = TextStyle(Color.Gray, fontSize = 20.sp)
                             )
+
                         },
                         onValueChange = { newText -> firstName = newText },
                         colors = TextFieldDefaults.colors(
@@ -138,7 +158,13 @@ fun RegisterScreen(navController: NavController) {
                             unfocusedContainerColor = Color.Transparent
                         )
                     )
-                    Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color(35,35,35)), modifier = Modifier.width(280.dp)) {
+                    Button(onClick = {
+                        if(firstName.isNotEmpty() && lastName.isNotEmpty() && eMail.isNotEmpty() && phone.isNotEmpty() && password.isNotEmpty()) {
+                            createUser(eMail, password, firstName, lastName, phone)
+                            navController.navigate("login_screen")
+                        }
+                                     else Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_LONG).show()
+                    }, colors = ButtonDefaults.buttonColors(containerColor = Color(35,35,35)), modifier = Modifier.width(280.dp)) {
                         Text(text = "Sign Up", style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold))
                     }
                     Button(onClick = { navController.navigate("login_screen") }, colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent), modifier = Modifier.padding(start = 50.dp)) {
@@ -149,4 +175,27 @@ fun RegisterScreen(navController: NavController) {
             }
         }
     }
+}
+
+fun createUser(eMail: String, password:String, firstName: String, lastName: String, phone: String){
+    val auth = FirebaseAuth.getInstance()
+    val fireStore = Firebase.firestore
+
+    auth.createUserWithEmailAndPassword(eMail, password).addOnCompleteListener {
+            val user = FirebaseAuth.getInstance().currentUser
+            val userId = user?.uid
+            val userInfo = hashMapOf(
+                "firstName" to firstName,
+                "lastName" to lastName,
+                "phone" to phone,
+                "eMail" to eMail
+            )
+            userId?.let{
+                fireStore.collection("users").document(it).set(userInfo)
+            }
+
+    }.addOnFailureListener {
+
+    }
+
 }

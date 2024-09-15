@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "home_screen"){
+    NavHost(navController = navController, startDestination = "login_screen"){
         composable("splash_screen"){
             SplashScreen(navController)
         }
@@ -39,7 +39,16 @@ fun Navigation(){
             RegisterScreen(navController)
         }
         composable("home_screen"){
-            HomeScreen()
+            HomeScreen(navController)
+        }
+        composable("place_order_screen"){
+            PlaceOrderScreen(navController = navController)
+        }
+        composable("order_history_screen"){
+
+        }
+        composable("update_info_screen"){
+
         }
     }
 
