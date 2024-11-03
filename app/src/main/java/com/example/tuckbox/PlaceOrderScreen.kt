@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -27,8 +29,11 @@ import com.example.tuckbox.ui.theme.Cabin
 import com.example.tuckbox.ui.theme.Kristi
 
 @Composable
-fun PlaceOrderScreen(navController: NavController) {
-    Box(modifier = Modifier.fillMaxSize()){
+fun PlaceOrderScreen(navController: NavController,navigationModel: NavigationModel) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)){
+        NavigationBar(navigation = navController,navigationModel)
         Row(
             Modifier
                 .fillMaxWidth()
@@ -42,13 +47,16 @@ fun PlaceOrderScreen(navController: NavController) {
             }
         }
         Column(modifier = Modifier
-            .padding(top = 60.dp)
+            .padding(top = 60.dp, start = 30.dp)
             .fillMaxSize()
             ) {
-            Text(text = "Place Order", style = TextStyle(fontFamily = Cabin, fontSize = 45.sp, fontWeight = FontWeight.Bold, color =  Color(35,35,35)), modifier = Modifier.padding(top = 40.dp, start = 20.dp))
-                FoodCard()
+            Text(text = "Place Order", style = TextStyle(fontFamily = Cabin, fontSize = 45.sp, fontWeight = FontWeight.Bold, color =  Color(35,35,35)), modifier = Modifier.padding(top = 40.dp))
+            Spacer(modifier = Modifier.padding(top = 150.dp))
+            FoodCard()
 //            LazyRow {
-//
+//                items(viewModel.addManualItem()){
+//                    food -> FoodCard(food = food)
+//                }
 //            }
         }
     }

@@ -66,7 +66,7 @@ data class User(
 )
 
 @Composable
-fun UpdateInfoScreen(navController: NavController,navigationModel: NavigationModel) {
+fun UpdateUserInfoScreen(navController: NavController,navigationModel: NavigationModel) {
     val local = LocalContext.current
     var userInfo by remember {
         mutableStateOf(User())
@@ -82,13 +82,13 @@ fun UpdateInfoScreen(navController: NavController,navigationModel: NavigationMod
     userId?.let {
         firestorm.collection("users").document(userId).get().addOnSuccessListener {
                 document ->
-                val data = document.data
-                userInfo = User(
-                    firstName = data?.get("firstName").toString(),
-                    lastName = data?.get("lastName").toString(),
-                    eMail = data?.get("eMail").toString(),
-                    phone = data?.get("phone").toString()
-                )
+            val data = document.data
+            userInfo = User(
+                firstName = data?.get("firstName").toString(),
+                lastName = data?.get("lastName").toString(),
+                eMail = data?.get("eMail").toString(),
+                phone = data?.get("phone").toString()
+            )
 
         }
     }
@@ -129,129 +129,129 @@ fun UpdateInfoScreen(navController: NavController,navigationModel: NavigationMod
                 .fillMaxSize()
                 .padding(top = 60.dp, start = ((config.screenWidthDp - 280)/2).dp)
                 , contentAlignment = Alignment.TopCenter) {
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.fillMaxSize().imePadding()) {
-                        item{
-                            Text(text = "First Name", fontSize = 15.sp, color = Color.Gray)
-                            TextField(modifier = Modifier
-                                .width(280.dp)
-                                .height(55.dp)
-                                .shadow(10.dp, RoundedCornerShape(10.dp))
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(Color.White), singleLine = true,
-                                value = firstName,
-                                placeholder = {
-                                    Text(
-                                        text = userInfo.firstName,
-                                        style = TextStyle(Color.Gray, fontSize = 20.sp)
-                                    )
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.fillMaxSize().imePadding()) {
+                    item{
+                        Text(text = "First Name", fontSize = 15.sp, color = Color.Gray)
+                        TextField(modifier = Modifier
+                            .width(280.dp)
+                            .height(55.dp)
+                            .shadow(10.dp, RoundedCornerShape(10.dp))
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White), singleLine = true,
+                            value = firstName,
+                            placeholder = {
+                                Text(
+                                    text = userInfo.firstName,
+                                    style = TextStyle(Color.Gray, fontSize = 20.sp)
+                                )
 
-                                },
-                                onValueChange = { newText -> firstName = newText },
-                                colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    cursorColor = Color.Black
-                                )
+                            },
+                            onValueChange = { newText -> firstName = newText },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = Color.Black
                             )
-                        }
-                        item{
-                            Text(text = "Last Name", fontSize = 15.sp, color = Color.Gray)
-                            TextField(modifier = Modifier
-                                .width(280.dp)
-                                .height(55.dp)
-                                .shadow(10.dp, RoundedCornerShape(10.dp))
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(Color.White),singleLine = true,
-                                value = lastName,
-                                placeholder = {
-                                    Text(
-                                        text = userInfo.lastName,
-                                        style = TextStyle(Color.Gray, fontSize = 20.sp)
-                                    )
-                                },
-                                onValueChange = { newText -> lastName = newText },
-                                colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    cursorColor = Color.Black
+                        )
+                    }
+                    item{
+                        Text(text = "Last Name", fontSize = 15.sp, color = Color.Gray)
+                        TextField(modifier = Modifier
+                            .width(280.dp)
+                            .height(55.dp)
+                            .shadow(10.dp, RoundedCornerShape(10.dp))
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White),singleLine = true,
+                            value = lastName,
+                            placeholder = {
+                                Text(
+                                    text = userInfo.lastName,
+                                    style = TextStyle(Color.Gray, fontSize = 20.sp)
                                 )
+                            },
+                            onValueChange = { newText -> lastName = newText },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = Color.Black
                             )
-                        }
-                        item{
-                            Text(text = "eMail", fontSize = 15.sp, color = Color.Gray)
-                            TextField(modifier = Modifier
-                                .width(280.dp)
-                                .height(55.dp)
-                                .shadow(10.dp, RoundedCornerShape(10.dp))
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(Color.White),singleLine = true,
-                                value = eMail,
-                                placeholder = {
-                                    Text(
-                                        text = userInfo.eMail,
-                                        style = TextStyle(Color.Gray, fontSize = 20.sp)
-                                    )
-                                },
-                                onValueChange = { newText -> eMail = newText },
-                                colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    cursorColor = Color.Black
+                        )
+                    }
+                    item{
+                        Text(text = "eMail", fontSize = 15.sp, color = Color.Gray)
+                        TextField(modifier = Modifier
+                            .width(280.dp)
+                            .height(55.dp)
+                            .shadow(10.dp, RoundedCornerShape(10.dp))
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White),singleLine = true,
+                            value = eMail,
+                            placeholder = {
+                                Text(
+                                    text = userInfo.eMail,
+                                    style = TextStyle(Color.Gray, fontSize = 20.sp)
                                 )
+                            },
+                            onValueChange = { newText -> eMail = newText },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = Color.Black
                             )
-                        }
-                        item{
-                            Text(text = "Phone", fontSize = 15.sp, color = Color.Gray)
-                            TextField(modifier = Modifier
-                                .width(280.dp)
-                                .height(55.dp)
-                                .shadow(10.dp, RoundedCornerShape(10.dp))
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(Color.White),singleLine = true,
-                                value = phone,
-                                placeholder = {
-                                    Text(
-                                        text = userInfo.phone,
-                                        style = TextStyle(Color.Gray, fontSize = 20.sp)
-                                    )
-                                },
-                                onValueChange = { newText -> phone = newText },
-                                colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    cursorColor = Color.Black
+                        )
+                    }
+                    item{
+                        Text(text = "Phone", fontSize = 15.sp, color = Color.Gray)
+                        TextField(modifier = Modifier
+                            .width(280.dp)
+                            .height(55.dp)
+                            .shadow(10.dp, RoundedCornerShape(10.dp))
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White),singleLine = true,
+                            value = phone,
+                            placeholder = {
+                                Text(
+                                    text = userInfo.phone,
+                                    style = TextStyle(Color.Gray, fontSize = 20.sp)
                                 )
+                            },
+                            onValueChange = { newText -> phone = newText },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = Color.Black
                             )
-                        }
-                        item{
-                            Spacer(modifier = Modifier.padding(top = 40.dp))
-                            Button(onClick = {
-                                if (userId != null) {
-                                    updateUser(firstName, lastName, eMail, phone, auth, firestorm, userId)
-                                    navController.navigate("home_screen")
-                                    Toast.makeText(local, "Successfully Updated!", Toast.LENGTH_SHORT).show()
-                                }
-                            }, colors = ButtonDefaults.buttonColors(containerColor = Color(230,64,67)), modifier = Modifier.width(280.dp)) {
-                                Text(text = "Update", style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold))
+                        )
+                    }
+                    item{
+                        Spacer(modifier = Modifier.padding(top = 40.dp))
+                        Button(onClick = {
+                            if (userId != null) {
+                                updateUser(firstName, lastName, eMail, phone, auth, firestorm, userId)
+                                navController.navigate("home_screen")
+                                Toast.makeText(local, "Successfully Updated!", Toast.LENGTH_SHORT).show()
                             }
-                        }
-                        item{
-
-                            Button(onClick = { deleteUi = !deleteUi
-                            }, colors = ButtonDefaults.buttonColors(containerColor = Color(50,50,50)), modifier = Modifier.width(280.dp)) {
-                                Text(text = "Delete Account", style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold))
-                            }
+                        }, colors = ButtonDefaults.buttonColors(containerColor = Color(230,64,67)), modifier = Modifier.width(280.dp)) {
+                            Text(text = "Update", style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold))
                         }
                     }
+                    item{
+
+                        Button(onClick = { deleteUi = !deleteUi
+                        }, colors = ButtonDefaults.buttonColors(containerColor = Color(50,50,50)), modifier = Modifier.width(280.dp)) {
+                            Text(text = "Delete Account", style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold))
+                        }
+                    }
+                }
 
             }
         }
@@ -280,7 +280,7 @@ fun updateUser(firstName: String, lastName: String, eMail: String, phone: String
 @Composable
 fun deleteUser(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore, navController: NavController, closeWinodw: (Boolean)->Unit){
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-        ){
+    ){
         Box(modifier = Modifier
             .clip(
                 RoundedCornerShape(20.dp)

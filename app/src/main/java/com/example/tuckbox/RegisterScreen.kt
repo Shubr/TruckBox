@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -145,6 +146,7 @@ fun RegisterScreen(navController: NavController) {
                         )
                     )
                     TextField(
+                        visualTransformation = PasswordVisualTransformation(),
                         value = password,
                         placeholder = {
                             Text(
@@ -191,7 +193,7 @@ fun createUser(eMail: String, password:String, firstName: String, lastName: Stri
                 "eMail" to eMail
             )
             userId?.let{
-                fireStore.collection("users").document(it).set(userInfo)
+                fireStore.collection("users").document(userId).set(userInfo)
             }
 
     }.addOnFailureListener {

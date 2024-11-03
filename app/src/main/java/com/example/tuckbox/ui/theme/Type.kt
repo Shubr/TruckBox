@@ -38,3 +38,6 @@ val Barlow = FontFamily(
 val Kristi = FontFamily(
     Font(R.font.kristi)
 )
+val CondensedReg = FontFamily(
+    Font(R.font.regular)
+)

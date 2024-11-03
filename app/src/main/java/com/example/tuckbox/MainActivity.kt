@@ -6,8 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +32,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login_screen"){
+    val navigationModel: NavigationModel = viewModel()
+    val navBackStack by navController.currentBackStackEntryAsState()
+
+    navBackStack?.destination?.route?.let { route->
+        navigationModel.updateCurrentScreen(route)
+    }
+    NavHost(navController = navController, startDestination = "update_info_screen"){
         composable("splash_screen"){
             SplashScreen(navController)
         }
@@ -39,17 +52,26 @@ fun Navigation(){
             RegisterScreen(navController)
         }
         composable("home_screen"){
-            HomeScreen(navController)
+            HomeScreen(navController,navigationModel)
         }
         composable("place_order_screen"){
-            PlaceOrderScreen(navController = navController)
+            PlaceOrderScreen(navController = navController, navigationModel)
         }
         composable("order_history_screen"){
-
+            OrderHistoryScreen(navController = navController, navigationModel = navigationModel)
         }
         composable("update_info_screen"){
-
+            UpdateInfoScreen(navController,navigationModel)
         }
     }
 
+}
+
+class NavigationModel : ViewModel(){
+    var currentScreen by mutableStateOf<String>("place_order_screen")
+        private set
+
+    fun updateCurrentScreen(screen: String){
+        currentScreen = screen
+    }
 }
