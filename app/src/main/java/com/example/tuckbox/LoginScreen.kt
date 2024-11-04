@@ -1,6 +1,7 @@
 package com.example.tuckbox
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -42,13 +43,13 @@ fun LoginScreen(navController: NavController) {
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .padding(top = screenSize.screenHeightDp.dp / 10f)){
-        Image(painterResource(id = R.drawable.sandwith), contentDescription = "s",
+        .padding(top = screenSize.screenHeightDp.dp / 10f).background(Color.White)){
+        Image(painterResource(id = R.drawable.sandwith), contentDescription = null,
             Modifier
                 .offset(x = 325.dp, y = (-130).dp)
                 .rotate(10f)
                 .size(200.dp))
-        Image(painterResource(id = R.drawable.greensalad), contentDescription = "s", Modifier.offset(x = -(130).dp, y = (510).dp).rotate(10f).size(250.dp))
+        Image(painterResource(id = R.drawable.greensalad), contentDescription =null, Modifier.offset(x = -(130).dp, y = (510).dp).rotate(10f).size(250.dp))
         Column(Modifier.padding(start = 30.dp)) {
             Text(text = "Welcome", style = TextStyle(fontFamily = Cabin, fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color(54,54,54)))
             Text(text = "Enter your eMail & Password", style = TextStyle(fontFamily = Cabin, fontSize = 20.sp, color = Color(90,90,90)))

@@ -16,6 +16,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,9 +31,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tuckbox.ui.theme.Cabin
 import com.example.tuckbox.ui.theme.Kristi
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 @Composable
 fun PlaceOrderScreen(navController: NavController,navigationModel: NavigationModel) {
+
+    var navSideWindow by remember{ mutableStateOf(false) }
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)){
@@ -42,7 +51,7 @@ fun PlaceOrderScreen(navController: NavController,navigationModel: NavigationMod
             IconButton(onClick = { navController.navigate("home_screen") }) {
                 Icon(painter = painterResource(id = R.drawable.arrow_left), contentDescription = null)
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navSideWindow = !navSideWindow }) {
                 Icon(painter = painterResource(id = R.drawable.navigation), contentDescription = null)
             }
         }
@@ -59,5 +68,7 @@ fun PlaceOrderScreen(navController: NavController,navigationModel: NavigationMod
 //                }
 //            }
         }
+        SideNavigationBar(navController = navController, sideNavWindow = navSideWindow)
+
     }
 }

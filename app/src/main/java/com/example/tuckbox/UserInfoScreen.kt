@@ -71,6 +71,7 @@ fun UpdateUserInfoScreen(navController: NavController,navigationModel: Navigatio
     var userInfo by remember {
         mutableStateOf(User())
     }
+    var navSideWindow by remember { mutableStateOf(false) }
 
     val auth = FirebaseAuth.getInstance()
     val firestorm = Firebase.firestore
@@ -97,7 +98,6 @@ fun UpdateUserInfoScreen(navController: NavController,navigationModel: Navigatio
     var eMail by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
 
-    var deleteWindow by remember{ mutableStateOf(false) }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -112,10 +112,10 @@ fun UpdateUserInfoScreen(navController: NavController,navigationModel: Navigatio
                 .fillMaxWidth()
                 .height(80.dp)
                 .padding(20.dp), horizontalArrangement = Arrangement.SpaceBetween){
-            IconButton(onClick = { navController.navigate("home_screen") }) {
+            IconButton(onClick = { navController.navigate("update_info_screen") }) {
                 Icon(painter = painterResource(id = R.drawable.arrow_left), contentDescription = null)
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {navSideWindow = !navSideWindow }) {
                 Icon(painter = painterResource(id = R.drawable.navigation), contentDescription = null)
             }
         }
@@ -255,6 +255,7 @@ fun UpdateUserInfoScreen(navController: NavController,navigationModel: Navigatio
 
             }
         }
+        SideNavigationBar(navController = navController, sideNavWindow = navSideWindow)
     }
     Box(modifier = Modifier
         .fillMaxSize()

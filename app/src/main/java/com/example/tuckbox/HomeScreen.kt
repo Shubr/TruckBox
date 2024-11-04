@@ -49,6 +49,8 @@ import com.google.firebase.ktx.Firebase
 
 @Composable
 fun HomeScreen(navController: NavController,navigationModel: NavigationModel) {
+    var navSideWindow by remember {
+        mutableStateOf(false)}
     val auth = FirebaseAuth.getInstance()
     val firestorm = Firebase.firestore
     var user by remember {
@@ -69,7 +71,7 @@ fun HomeScreen(navController: NavController,navigationModel: NavigationModel) {
                 .fillMaxWidth()
                 .height(80.dp)
                 .padding(20.dp), horizontalArrangement = Arrangement.End){
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navSideWindow = !navSideWindow }) {
                 Icon(painter = painterResource(id = R.drawable.navigation), contentDescription = null)
             }
         }
@@ -121,5 +123,7 @@ fun HomeScreen(navController: NavController,navigationModel: NavigationModel) {
             }
 
         }
+        SideNavigationBar(navController = navController, sideNavWindow = navSideWindow)
+
     }
 }

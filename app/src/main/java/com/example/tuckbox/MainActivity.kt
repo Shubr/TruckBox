@@ -38,7 +38,7 @@ fun Navigation(){
     navBackStack?.destination?.route?.let { route->
         navigationModel.updateCurrentScreen(route)
     }
-    NavHost(navController = navController, startDestination = "update_info_screen"){
+    NavHost(navController = navController, startDestination = "place_order_screen"){
         composable("splash_screen"){
             SplashScreen(navController)
         }
@@ -59,6 +59,12 @@ fun Navigation(){
         }
         composable("order_history_screen"){
             OrderHistoryScreen(navController = navController, navigationModel = navigationModel)
+        }
+        composable("user_info_screen"){
+            UpdateUserInfoScreen(navController = navController, navigationModel = navigationModel)
+        }
+        composable("delivery_screen"){
+            DeliveryScreen(navController = navController, navigationModel = navigationModel)
         }
         composable("update_info_screen"){
             UpdateInfoScreen(navController,navigationModel)
