@@ -3,9 +3,11 @@ package com.example.tuckbox
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -63,7 +65,9 @@ fun RegisterScreen(navController: NavController) {
     val passwordError by remember{ mutableStateOf(false)}
 
 
-        Box(modifier = Modifier.fillMaxSize()){
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)){
         Image(painter = painterResource(R.drawable.sandwith), contentDescription = null,
             Modifier
                 .size(250.dp)
@@ -160,6 +164,7 @@ fun RegisterScreen(navController: NavController) {
                             unfocusedContainerColor = Color.Transparent
                         )
                     )
+                    Spacer(modifier = Modifier.padding(top = 20.dp))
                     Button(onClick = {
                         if(firstName.isNotEmpty() && lastName.isNotEmpty() && eMail.isNotEmpty() && phone.isNotEmpty() && password.isNotEmpty()) {
                             createUser(eMail, password, firstName, lastName, phone)

@@ -1,4 +1,4 @@
-package com.example.tuckbox
+package com.example.tuckbox.roomDb
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
