@@ -1,5 +1,6 @@
 package com.example.tuckbox
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +48,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
 @Composable
 fun PlaceOrderScreen(navController: NavController,navigationModel: NavigationModel) {
@@ -64,17 +67,29 @@ fun PlaceOrderScreen(navController: NavController,navigationModel: NavigationMod
         mutableStateOf("")
     }
     var addressDropDown by remember{ mutableStateOf(false) }
-
-    userId.let {
+    var loading by remember {
+        mutableStateOf(true)
+    }
+    LaunchedEffect(userId) {
         if (userId != null) {
-            firestore.collection("users").document(userId).collection("address")
-                .get().addOnSuccessListener {
-                        snapShot ->
-                    val address = snapShot.documents.mapNotNull { it.toObject<Address>() }
-                    addressList = address
-                }
+            try {
+                // Fetch address data once
+                val snapShot = firestore.collection("users")
+                    .document(userId)
+                    .collection("address")
+                    .get()
+                    .await() // Await result if using coroutines
+
+                addressList = snapShot.documents.mapNotNull { it.toObject<Address>() }
+                loading = false
+            } catch (e: Exception) {
+                // Handle any errors (e.g., log or show error message)
+                Log.e("Firestore", "Error fetching addresses: ${e.message}")
+            }
         }
     }
+
+
 
     var timeSlot by remember{ mutableStateOf("") }
     var timeSlotDropDown by remember { mutableStateOf(false) }
@@ -145,10 +160,10 @@ fun PlaceOrderScreen(navController: NavController,navigationModel: NavigationMod
                 }
             }
             Spacer(modifier = Modifier.padding(top = 5.dp))
-            Text(text = "Delivery Time", fontFamily = CondensedReg, color = Color.Gray)
+            Text(text = "Delivery Address", fontFamily = CondensedReg, color = Color.Gray)
 
             Row {
-                Button(onClick = { timeSlotDropDown = true }, shape = RoundedCornerShape(10.dp),modifier = Modifier
+                Button(onClick = { addressDropDown = !addressDropDown }, shape = RoundedCornerShape(10.dp),modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
                     .shadow(
@@ -156,19 +171,21 @@ fun PlaceOrderScreen(navController: NavController,navigationModel: NavigationMod
                         RoundedCornerShape(10.dp)
                     )
                     .background(Color.White), colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)) {
-                    Text(text = timeSlot, color = Color.Black, fontSize = 20.sp)
-                    DropdownMenu(expanded = addressDropDown, onDismissRequest = { timeSlotDropDown = false }, modifier = Modifier.width(300.dp)) {
-                        LazyColumn {
-                            items(addressList){
-                                    addressList ->
-                                DropdownMenuItem(text = { Text(text = addressList.street) }, onClick = {
-                                    address = addressList.street
-                                    addressDropDown = false
-                                })
-                            }
-                        }
-                    }
+                    Text(text = address, color = Color.Black, fontSize = 20.sp)
                 }
+//                if(!loading){
+//                    DropdownMenu(expanded = true, onDismissRequest = { /*TODO*/ }){
+//                        LazyColumn {
+//                            items(addressList){
+//                                    addressList ->
+//                                DropdownMenuItem(text = { Text(text = addressList.street) }, onClick = {
+//                                    address = addressList.street
+//                                    addressDropDown = false
+//                                })
+//                            }
+//                        }
+//                    }
+//                }
             }
             Spacer(modifier = Modifier.padding(top = 100.dp))
             FoodCard()
